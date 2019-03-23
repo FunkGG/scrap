@@ -7,6 +7,7 @@ import lxml.html
 import csv
 import re
 import random
+import socket
 
 
 class Throttle:
@@ -28,7 +29,12 @@ class Throttle:
 def get_robots(url):
     rp = robotparser.RobotFileParser()
     rp.set_url(urllib.parse.urljoin(url, '/robots.txt'))
-    rp.read()
+    try:
+        rp.read()
+    except urllib.error.URLError as e:
+        print('robot get error:', e.reason)
+        rp = None
+
     return rp
 
 
@@ -64,7 +70,8 @@ class ScrapeCallback:
 
 
 class Downloader:
-    def __init__(self, delay=5, user_agent='FunkGG', proxies=None, num_retries=1, cache=None):
+    def __init__(self, delay=5, user_agent='wswp', proxies=None, num_retries=1, timeout=60, cache=None):
+        socket.setdefaulttimeout(timeout)
         self.throttle = Throttle(delay)
         self.user_agent = user_agent
         self.proxies = proxies

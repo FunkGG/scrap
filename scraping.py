@@ -1,9 +1,8 @@
 from crawl_function import *
 from queue import deque
-from cache import DiskCache
 
 
-def link_crawler(seed_url, link_regex=None, delay=5, num_retries=1, max_depth=-1,
+def link_crawler(seed_url, link_regex=None, delay=0, num_retries=1, max_depth=-1,
                  max_urls=-1, user_agent='FunkGG', proxies=None, scrape_callback=None, cache=None):
     crawl_queue = deque([seed_url])  # 待爬取队列
     seen = {seed_url:0}             # 记录以爬取过的网址和其深度
@@ -38,6 +37,6 @@ def link_crawler(seed_url, link_regex=None, delay=5, num_retries=1, max_depth=-1
 
 if __name__ == '__main__':
     # link_crawler('http://example.webscraping.com', '/places/default/(index|view)',
-    #               delay=5, num_retries=1, user_agent='BadCrawler')
+                  # delay = 0, num_retries=1, user_agent='BadCrawler')
     link_crawler('http://example.webscraping.com', '/places/default/(index|view)',
-                 max_depth=2, max_urls=10, cache=DiskCache())
+                 delay=0, num_retries=1, max_depth=1)
